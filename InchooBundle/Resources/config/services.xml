@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<container
+        xmlns="http://symfony.com/schema/dic/services"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+    <services>
+        <service id="inchoo.fixture.products" class="InchooBundle\Fixture\InchooProductFixture">
+            <argument type="service" id="sylius.fixture.product_attribute" />
+            <argument type="service" id="sylius.fixture.product" />
+            <argument>%locale%</argument>
+            <tag name="sylius_fixtures.fixture" />
+        </service>
+    </services>
+</container>
