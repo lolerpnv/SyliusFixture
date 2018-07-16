@@ -5,63 +5,40 @@ namespace InchooBundle\Fixture;
 use InchooBundle\Fixture\Generators\Books;
 use InchooBundle\Fixture\Generators\Category;
 use InchooBundle\Fixture\Generators\Mugs;
+use Sylius\Bundle\CoreBundle\Fixture\AbstractResourceFixture;
 use Sylius\Bundle\FixturesBundle\Fixture\AbstractFixture;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * Main fixture that handles taxon and product generation
- * Class InchooProductFixture
  * @package InchooBundle\Fixture
  */
 class InchooProductFixture extends AbstractFixture
 {
     /**
-     * @var \Faker\Generator
+     * @var AbstractResourceFixture
      */
-    private $faker;
+    private $productAttributeFixture;
 
     /**
-     * @var OptionsResolver
+     * @var AbstractResourceFixture
      */
-    private $optionsResolver;
+    private $productFixture;
 
     /**
-     * @var Category
+     * @var string
      */
-    private $categoryFactory;
+    private $baseLocaleCode;
 
-    /**
-     * @var Books
-     */
-    private $booksFactory;
-
-    /**
-     * @var Mugs
-     */
-    private $mugsFactory;
-
-    /**
-     * InchooProductFixture constructor.
-     * @param Category $categoryFactory
-     * @param Books $booksFactory
-     * @param Mugs $mugsFactory
-     */
-    public function __construct(
-        Category $categoryFactory,
-        Books $booksFactory,
-        Mugs $mugsFactory
-    ) {
-        $this->categoryFactory = $categoryFactory;
-        $this->booksFactory = $booksFactory;
-        $this->mugsFactory = $mugsFactory;
-
-        $this->faker = \Faker\Factory::create();
-        $this->optionsResolver =
-            (new OptionsResolver())
-                ->setRequired('amount')
-                ->setAllowedTypes('amount', 'int')
-        ;
+    public  function __construct(
+        AbstractResourceFixture $productAttributeFixture,
+        AbstractResourceFixture $productFixture,
+        string $baseLocaleCode
+    )
+    {
+        $this->productAttributeFixture = $productAttributeFixture;
+        $this->productFixture = $productFixture;
+        $this->baseLocaleCode = $baseLocaleCode;
     }
 
     /**
@@ -78,17 +55,21 @@ class InchooProductFixture extends AbstractFixture
      */
     function load(array $options): void
     {
-        //In case you want to use xdebug,rise nesting level
-        //ini_set('xdebug.max_nesting_level', 1000);
-        //create categories
-        $this->categoryFactory->prepStructure();
-        $this->booksFactory->generate($this->categoryFactory->catList);
-        $this->mugsFactory->generate($this->categoryFactory->catList);
-
+        echo "ss";
+        //fixture logic
     }
 
+    /**
+     * this method allows us to declare options which fixture will expect upon execution
+     *
+     * @param ArrayNodeDefinition $optionsNode
+     */
     function configureOptionsNode(ArrayNodeDefinition $optionsNode): void
     {
-        //do it , configure it
+        //optionsNode allows you to define parameters for fixture
+        $optionsNode
+            ->children()
+            ->integerNode('amount')->isRequired()->min(0)->end()
+        ;
     }
 }
